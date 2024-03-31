@@ -26,8 +26,8 @@ export default class Egg {
     this.vy = Math.sin(direction) * speed;
 
     // Adjusted sizes for a more elongated egg shape
-    this.width = 60; // Width between 40 and 60
-    this.height = 100; // Height between 60 and 80
+    this.width = 60;
+    this.height = 100;
 
     // Random color
     let hue = Math.floor(Math.random() * 360);

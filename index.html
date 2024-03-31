@@ -10,7 +10,18 @@
     <div class="game-container">
         <canvas id="gameCanvas"></canvas>
     </div>
-    <div id="scoreboard" style="position: absolute; top: 10px; left: 10px; font-size: 20px;">Score: 0</div>
+    <div id="scoreboard">
+        <img src="img/eggBasket.webp" alt="Egg Basket" style="width: 60px; vertical-align: middle;"> Score: <span id="score">0</span>
+    </div>
+     <!-- Game Over Screen -->
+    <div id="gameOverScreen">
+        <p id="finalScore"></p>
+        <p><a href="#" id="shareLink">Share Your Score</a></p>
+        <div id="messageContainer">
+          <h2>Bummer!</h2>
+          <h3>Get yourself some real chocolate eggs</h3>
+        </div>
+    </div>
     <script type="module" src="js/game.js"></script>
 </body>
 </html>

@@ -95,9 +95,134 @@ fieldset {
 /*
  * Allow only vertical resizing of textareas.
  */
-
 textarea {
   resize: vertical;
+}
+
+#gameOverScreen {
+    display: none; /* Initially hidden */
+    position: fixed; /* Overlay the game container */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    color: #333;
+    text-align: center;
+    padding-top: 50px;
+    box-sizing: border-box;
+    z-index: 10; /* Ensure it overlays other content */
+}
+
+#gameOverScreen::after {
+    content: "";
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    height: 75%;
+    background-image: url('../img/chocolateSplat.jpeg'); /* Path to your chocolate splat image */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    opacity: 0.8;
+    z-index: -1; /* Keep it behind the text */
+}
+
+#gameOverScreen::before {
+    content: "";
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    height: 75%;
+    background-image: url('../img/eggBroken.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    opacity: 0.5;
+    z-index: -1; /* Keep it behind the text */
+}
+
+#gameOverScreen h2 {
+    font-size: 2em;
+    color: #cccccc;
+}
+
+#messageContainer {
+  position: relative;
+  bottom: 400px;
+  z-index: 2;
+  text-align: center;
+  padding: 600px;
+  max-width: 500px;
+  color: #cccccc;
+}
+
+#gameOverScreen #finalScore {
+    font-size: 1.5em;
+    margin: 20px 0; /* Spacing around the score for clarity */
+}
+
+#gameOverScreen #shareLink {
+    font-size: 1.2em;
+    background-color: #007bff; /* button color */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block; /* Align properly within the text flow */
+    margin-top: 20px;
+}
+
+#gameOverScreen #shareLink:hover {
+    background-color: #0056b3; /* Darker on hover for interactivity */
+}
+
+#chocolateSplat {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%; /* Adjust based on your image and preference */
+    height: 200px; /* Initial height, adjust as necessary */
+    /*background-image: url('path/to/your/chocolate-splat-image.png'); !* Path to your image *!*/
+    background-size: cover;
+    z-index: 5;
+}
+
+.chocolateDrip {
+    position: absolute;
+    bottom: 100%;
+    background-color: #3E2723; /* Dark chocolate color */
+    border-radius: 50%;
+}
+
+#scoreboard {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+    border-radius: 10px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#scoreboard img {
+    width: 30px;
+    margin-right: 5px;
+    animation: bounce 1s infinite;
+}
+
+/* Example bounce animation */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 /* ==========================================================================
