@@ -10,7 +10,7 @@ export const applyUniformForce = (objects, x, y) => {
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     // Apply force only if the click/touch is within a certain radius
-    if (distance < 150 && distance > 0) { // Avoid division by zero
+    if (distance < 500 && distance > 0) { // Avoid division by zero
       const forceMagnitude = 100 / distance; // Adjust for stronger/weaker force
       obj.vx += (dx / distance) * forceMagnitude;
       obj.vy += (dy / distance) * forceMagnitude;
@@ -41,8 +41,8 @@ export const reflectWithEnergyLoss = (obj, canvasWidth, canvasHeight) => {
   }
 };
 
-export const checkForCollisions = (objArray, scoreUpdateCallback) => {
-  const threshold = 5; // Todo: change collision threshold if needed
+export const checkForCollisions = (objArray, height, width, scoreUpdateCallback) => {
+  const threshold = 50; // Todo: change collision threshold if needed
   let updatedArray = [...objArray];
   objArray.forEach((obj1, index1) => {
     objArray.forEach((obj2, index2) => {
@@ -51,9 +51,8 @@ export const checkForCollisions = (objArray, scoreUpdateCallback) => {
       const dx = obj1.x - obj2.x;
       const dy = obj1.y - obj2.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
-
       if (distance < threshold) { // If eggs are within x pixels
-        updatedArray = determineOutcome(updatedArray, obj1, obj2, scoreUpdateCallback);
+        updatedArray = determineOutcome(updatedArray, obj1, obj2, height, width, scoreUpdateCallback);
       }
     });
   });

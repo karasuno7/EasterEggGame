@@ -22,13 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let eggs = [];
   const eggCount = 3; // Todo: Change initial count here
+  const maxEggs = 8;
 
   // Initialize eggs
   for (let i = 0; i < eggCount; i++) {
     eggs.push(new Egg(canvas.width, canvas.height));
   }
 
+  let lastEggAddedTime = performance.now();
+
   let score = 0; // Initial score
+
   const updateScore = (points) => {
     score += points;
     console.log("Score:", score);
@@ -47,12 +51,23 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const currentTime = performance.now();
+    const timeSinceLastEggAdded = (currentTime - lastEggAddedTime) / 1000;
+
     // updateBackground(ctx); // Update the dynamic background
     eggs.forEach(egg => {
       egg.update();
       egg.draw(ctx);
     });
-    eggs = checkForCollisions(eggs, updateScore);
+    eggs = checkForCollisions(eggs, canvas.height, canvas.width, updateScore);
+
+    // add new egg if no event and gain points
+    if (timeSinceLastEggAdded >= 15 && eggs.length < maxEggs) {
+        eggs.push(new Egg(canvas.width, canvas.height));
+        lastEggAddedTime = currentTime;
+        updateScore(3);
+    }
     /**
      * Execution Frequency of requestAnimationFrame()
      * 1. Browser Refresh Rate: requestAnimationFrame() tries to execute the game loop in sync with the browser's refresh rate.
