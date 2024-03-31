@@ -1,86 +1,91 @@
 import Egg from './eggs.js';
 import {handleInput} from './input.js';
-import {checkForCollisions} from "./physics.js";
+import {addToGrid, checkForCollisions, initGrid} from "./physics.js";
 // import { updateBackground } from './background.js';
 
 /**
  * Main game file handles game loop
- * If you were interested in doing a physics simulation, the controllable parameters are:
- * 1. initial number of eggs
- * 2. probability function for outcomes
- * 3. initial speed of eggs
- * 4. energy loss factor for eggs
- *
- * Author:Aditi Tripathi
+ * Author: Aditi Tripathi
  */
-document.addEventListener('DOMContentLoaded', () => {
 
-  const canvas = document.getElementById('gameCanvas');
-  const ctx = canvas.getContext('2d');
+let canvas, ctx;
+let eggs = [];
+let eggCount = 5; // Todo: Change initial count here
+const maxEggs = 8;
+let gameRunning = true;
+let lastEggAddedTime = 0;
+let score = 0; // Initial score
+
+document.addEventListener('DOMContentLoaded', setup);
+
+function setup() {
+  canvas = document.getElementById('gameCanvas');
+  ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
-  let eggs = [];
-  const eggCount = 3; // Todo: Change initial count here
-  const maxEggs = 8;
-
+  initGrid(canvas.height, canvas.width);
   // Initialize eggs
   for (let i = 0; i < eggCount; i++) {
-    eggs.push(new Egg(canvas.width, canvas.height));
+    const newEgg = new Egg(canvas.width, canvas.height);
+    eggs.push(newEgg);
+    addToGrid(newEgg); // Add egg to the grid
   }
 
-  let lastEggAddedTime = performance.now();
-
-  let score = 0; // Initial score
-
-  const updateScore = (points) => {
-    score += points;
-    console.log("Score:", score);
-    document.getElementById('scoreboard').innerText = `Score: ${score}`; // Update scoreboard display
-  };
+  lastEggAddedTime = performance.now();
+  score = 0; // Reset score
 
   handleInput(canvas, eggs); // Pass eggs array for interaction handling
+  gameLoop(); // Start the game loop
+}
 
-  /**
-   * Main game loop
-   * This updates the game's state on each iteration, which includes:
-   * Moving eggs
-   * Handling user input (like keyboard presses or mouse clicks)
-   * Applying game physics (such as gravity or collisions
-   * Managing game mechanics (like scoring, collision events etc.)
-   */
-  function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+const updateScore = (points) => {
+  score += points;
+  document.getElementById('score').innerText = score;
+};
 
-    const currentTime = performance.now();
-    const timeSinceLastEggAdded = (currentTime - lastEggAddedTime) / 1000;
+const stopGame = () => {
+  gameRunning = false;
+  const gameOverScreen = document.getElementById('gameOverScreen');
+  document.getElementById('finalScore').innerText = `Your basket has ${score} eggs`;
+  const baseShareURL = "https://localhost:63343/?score=";
+  document.getElementById('shareLink').href = `${baseShareURL}${score}`;
+  document.getElementById('shareLink').innerText = "Share Your Eggs!";
+  gameOverScreen.style.display = 'block';
+};
 
-    // updateBackground(ctx); // Update the dynamic background
-    eggs.forEach(egg => {
-      egg.update();
-      egg.draw(ctx);
-    });
-    eggs = checkForCollisions(eggs, canvas.height, canvas.width, updateScore);
+function gameLoop() {
+  if (!gameRunning) return;
 
-    // add new egg if no event and gain points
-    if (timeSinceLastEggAdded >= 15 && eggs.length < maxEggs) {
-        eggs.push(new Egg(canvas.width, canvas.height));
-        lastEggAddedTime = currentTime;
-        updateScore(3);
-    }
-    /**
-     * Execution Frequency of requestAnimationFrame()
-     * 1. Browser Refresh Rate: requestAnimationFrame() tries to execute the game loop in sync with the browser's refresh rate.
-     *    For most modern monitors, this is typically 60 Hz, which means the game loop aims to run approximately every 16.67ms
-     *    (1000 ms/60 fps = 16.67 ms per frame).
-     * 2. Variable: The actual rate can vary depending on the browser's load, the device's capabilities, and whether the tab is active.
-     *    Browsers may throttle or pause requestAnimationFrame() callbacks in inactive tabs to save resources.
-     * 3. V-Sync: By syncing with the display's refresh rate, requestAnimationFrame() also helps prevent visual artifacts like tearing,
-     *    making it preferable for animations and games over setTimeout() or setInterval().
-     */
-    requestAnimationFrame(gameLoop);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const currentTime = performance.now();
+  const timeSinceLastEggAdded = (currentTime - lastEggAddedTime) / 1000;
+
+  // updateBackground(ctx); // Update the dynamic background
+  eggs.forEach(egg => {
+    egg.update();
+    egg.draw(ctx);
+  });
+  eggs = checkForCollisions(eggs, canvas.height, canvas.width, updateScore);
+
+  if (eggs === null) {
+    stopGame();
+    return;
   }
-
-  gameLoop();
-});
-
+  if (timeSinceLastEggAdded >= 15 && eggs.length < maxEggs) {
+    eggs.push(new Egg(canvas.width, canvas.height));
+    lastEggAddedTime = currentTime;
+    updateScore(3);
+  }
+  /**
+   * Execution Frequency of requestAnimationFrame()
+   * 1. Browser Refresh Rate: requestAnimationFrame() tries to execute the game loop in sync with the browser's refresh rate.
+   *    For most modern monitors, this is typically 60 Hz, which means the game loop aims to run approximately every 16.67ms
+   *    (1000 ms/60 fps = 16.67 ms per frame).
+   * 2. Variable: The actual rate can vary depending on the browser's load, the device's capabilities, and whether the tab is active.
+   *    Browsers may throttle or pause requestAnimationFrame() callbacks in inactive tabs to save resources.
+   * 3. V-Sync: By syncing with the display's refresh rate, requestAnimationFrame() also helps prevent visual artifacts like tearing,
+   *    making it preferable for animations and games over setTimeout() or setInterval().
+   */
+  requestAnimationFrame(gameLoop);
+}

@@ -82,3 +82,4 @@ export function getRandomColors() {
     }
     return [color1, color2];
 }
+
