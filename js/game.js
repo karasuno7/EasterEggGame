@@ -1,7 +1,6 @@
 import Egg from './eggs.js';
 import {handleInput} from './input.js';
 import {addToGrid, checkForCollisions, initGrid} from "./physics.js";
-// import { updateBackground } from './background.js';
 
 /**
  * Main game file handles game loop
@@ -10,7 +9,7 @@ import {addToGrid, checkForCollisions, initGrid} from "./physics.js";
 
 let canvas, ctx;
 let eggs = [];
-let eggCount = 5; // Todo: Change initial count here
+let eggCount = 3; // Todo: Change initial count here
 const maxEggs = 8;
 let gameRunning = true;
 let lastEggAddedTime = 0;
@@ -47,7 +46,7 @@ const stopGame = () => {
   gameRunning = false;
   const gameOverScreen = document.getElementById('gameOverScreen');
   document.getElementById('finalScore').innerText = `Your basket has ${score} eggs`;
-  const baseShareURL = "https://localhost:63343/?score=";
+  const baseShareURL = "https://development.d2s0vd9dajmu13.amplifyapp.com/?score=";
   document.getElementById('shareLink').href = `${baseShareURL}${score}`;
   document.getElementById('shareLink').innerText = "Share Your Eggs!";
   gameOverScreen.style.display = 'block';
