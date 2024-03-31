@@ -8,7 +8,7 @@ const outcomes = {
     console.log("breaking egg");
     egg1.isBroken = true;
     egg2.isBroken = true;
-    updateScore(-1); // Lose a
+    updateScore(-1); // Todo fix this break logic
     return eggs.filter(egg => !egg.isBroken);
   },
   createNewEgg: (eggs, egg1, egg2, height, width, updateScore) => {

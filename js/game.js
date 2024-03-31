@@ -1,6 +1,6 @@
 import Egg from './eggs.js';
 import {handleInput} from './input.js';
-import {addToGrid, checkForCollisions, initGrid} from "./physics.js";
+import {checkForCollisions} from "./physics.js";
 
 /**
  * Main game file handles game loop
@@ -9,7 +9,7 @@ import {addToGrid, checkForCollisions, initGrid} from "./physics.js";
 
 let canvas, ctx;
 let eggs = [];
-let eggCount = 3; // Todo: Change initial count here
+let eggCount = 4; // Todo: Change initial count here
 const maxEggs = 8;
 let gameRunning = true;
 let lastEggAddedTime = 0;
@@ -22,12 +22,10 @@ function setup() {
   ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  initGrid(canvas.height, canvas.width);
+
   // Initialize eggs
   for (let i = 0; i < eggCount; i++) {
-    const newEgg = new Egg(canvas.width, canvas.height);
-    eggs.push(newEgg);
-    addToGrid(newEgg); // Add egg to the grid
+    eggs.push(new Egg(canvas.width, canvas.height));
   }
 
   lastEggAddedTime = performance.now();
