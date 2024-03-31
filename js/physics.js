@@ -96,7 +96,7 @@ export const checkForCollisions = (objArray, height, width, scoreUpdateCallback)
 
 
 
-const CELL_SIZE = 150; // Example size, adjust based on your threshold
+const CELL_SIZE = 300;
 let grid = [];
 let cols, rows;
 

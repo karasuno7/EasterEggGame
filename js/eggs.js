@@ -21,7 +21,7 @@ export default class Egg {
 
     this.pattern = Math.random() > 0.5 ? 'stripes' : 'polkaDots';
     const direction = Math.random() * 2 * Math.PI; // Random direction
-    const speed = 1; // adjust initial speed
+    const speed = 1.5; // adjust initial speed
     this.vx = Math.cos(direction) * speed; // or use uniform speed
     this.vy = Math.sin(direction) * speed;
 
